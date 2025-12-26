@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Thông Tin Sinh Viên - Học Phí</title>
+    <style>
+        /* --- GIỮ NGUYÊN CSS --- */
+        * { box-sizing: border-box; }
+        body { font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0; padding: 0; background-color: #fff; color: #333; }
+        .container { width: 100%; max-width: 1366px; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-bold { font-weight: bold; }
+        .text-red { color: red; }
+        .header { padding: 10px 0; display: flex; align-items: center; }
+        .header-logo img { height: 60px; width: auto; margin-right: 15px; }
+        .header-title h1 { color: #2e6da4; font-size: 24px; margin: 0; text-transform: uppercase; font-weight: bold; }
+        .header-title h2 { color: #555; font-size: 18px; margin: 5px 0 0 0; font-weight: normal; }
+        .navbar { background-color: #4D90FE; color: white; padding: 0; margin-bottom: 20px; }
+        .navbar ul { list-style: none; margin: 0; padding: 0; display: flex; }
+        .navbar li { padding: 10px 15px; cursor: pointer; }
+        .navbar li:hover { background-color: #3071a9; }
+        .navbar .user-info { margin-left: auto; display: flex; }
+        .page-header { border-bottom: 1px solid #eee; margin-bottom: 20px; }
+        .page-header h3 { color: #428bca; font-size: 24px; margin: 10px 0; display: flex; align-items: center; }
+        .icon-cal { display: inline-block; width: 32px; height: 32px; background-color: #bcd5eb; margin-right: 10px; border-radius: 4px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23428bca"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>'); }
+        .filter-bar { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ddd; }
+        select, input[type="text"] { padding: 6px 12px; font-size: 13px; border: 1px solid #ccc; border-radius: 4px; color: #555; }
+        select { height: 34px; }
+        .btn-primary { background-color: #428bca; color: white; border: 1px solid #357ebd; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .panel { border: 1px solid #ddd; border-radius: 4px; margin-bottom: 20px; background-color: #fff; }
+        .panel-heading { background-color: #f5f5f5; padding: 10px 15px; border-bottom: 1px solid #ddd; font-weight: bold; color: #333; }
+        .panel-body { padding: 15px; }
+        .form-row { display: flex; margin-bottom: 10px; }
+        .form-group { margin-right: 20px; flex: 1; display: flex; align-items: center; }
+        .form-group label { width: 80px; text-align: right; margin-right: 10px; font-weight: normal; }
+        .form-control { width: 100%; background-color: #eee; cursor: not-allowed; }
+        .alert-text { color: #d9534f; font-weight: bold; font-size: 14px; margin: 10px 0; }
+        .table-container { border: 1px solid #ddd; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        table th, table td { border: 1px solid #ddd; padding: 8px; vertical-align: middle; }
+        table th { background-color: #f0f0f0; text-align: center; white-space: nowrap; }
+        .col-stt { width: 40px; text-align: center; }
+        .col-money { text-align: right; }
+        .row-total { background-color: #eceac1; font-weight: bold; }
+        .check-mark { color: #428bca; font-weight: bold; font-size: 16px; }
+        .footer-spacer { height: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-logo">
+                <img src="https://sv.dut.udn.vn/Styles/images/logo.png" alt="Logo Trường">
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="container">
+            <ul>
+                <li>Cá nhân</li>
+                <li>Lớp/ Đoàn/ Hội</li>
+                <li>Đăng ký</li>
+                <li>Đề nghị Trường</li>
+                <li>Phản ánh</li>
+                <div class="user-info">
+                    <li>Chào Đoàn Công Tuấn Vũ-22T_Nhat1 (102220304)</li>
+                    <li>Thoát</li>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h3><span class="icon-cal"></span> Học phí</h3>
+        </div>
+
+        <div class="filter-bar">
+            <select id="semesterSelect" onchange="loadData()" style="min-width: 250px;">
+                <option value="HK1_2025_2026">Học kỳ 1 năm học 2025-2026</option>
+                <option value="HK2_2025_2026">Học kỳ 2 năm học 2025-2026</option>
+            </select>
+            <button class="btn-primary" onclick="loadData()">Dữ liệu</button>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading">Lập đơn đề nghị hoãn đóng học phí <span id="lblSemesterTitle">Học kỳ 1 / Năm học 2025 - 2026</span></div>
+            <div class="panel-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Họ tên:</label>
+                        <input type="text" class="form-control" value="Đoàn Công Tuấn Vũ" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Số thẻ SV:</label>
+                        <input type="text" class="form-control" value="102220304" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Điện thoại:</label>
+                        <input type="text" class="form-control" value="0357219502" readonly> </div>
+                    <div class="form-group">
+                        <label>Lớp:</label>
+                        <input type="text" class="form-control" value="22T_Nhat1" readonly>
+                    </div>
+                </div>
+
+                <div class="alert-text">
+                    Hạn nộp đơn hoãn học phí trước ngày 01/01/0001. Đã hết hạn đề nghị Trường hoãn đóng học phí!
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <span class="text-bold" style="color: #428bca; margin-right: 10px;">Chọn đợt hoãn đóng học phí:</span>
+                    <select style="width: 100px;" disabled>
+                        <option>Đợt 1</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading" style="background-color: #ddd;">Học phí lớp học phần</div>
+            <div style="padding: 0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th>Mã lớp học phần</th>
+                            <th>Tên lớp học phần</th>
+                            <th>Số TC</th>
+                            <th>CLC</th>
+                            <th>Học phí</th>
+                            <th>Học lại</th>
+                            <th>Đăng ký<br>đóng ở đợt</th>
+                            <th>Ấn định đóng đợt này, không thay đổi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tuitionTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading" style="background-color: #f5f5f5;">Học phí đã nộp trong kỳ</div>
+            <div style="padding: 0;">
+                <table style="border: none;">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th>Học kỳ</th>
+                            <th>Số tiền nộp</th>
+                            <th>Ngày nộp</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-stt">1</td>
+                            <td id="paidSemesterName">Học kỳ 1 năm học 2025-2026</td>
+                            <td class="text-center text-bold" id="paidAmount">26 400 000</td>
+                            <td class="text-center" id="paidDate">25/11/2025</td>
+                            <td id="paidNote">THU HOC PHI HK1 25 26</td>
+                        </tr>
+                        <tr class="row-total">
+                            <td colspan="2" class="text-right">Tổng học phí đã nộp trong kỳ:</td>
+                            <td class="text-center text-bold" id="totalPaidAmount">26 400 000</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-heading" style="background-color: #f5f5f5;">Học phí sinh viên cần nộp:</div>
+            <div style="padding: 0;">
+                <table style="border: none;">
+                    <thead>
+                        <tr>
+                            <th class="col-stt">STT</th>
+                            <th>Học kỳ</th>
+                            <th>Số tiền cần nộp</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody id="needToPayBody">
+                         </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer-spacer"></div>
+    </div>
+
+    <script>
+        const tuitionData = {
+            "HK1_2025_2026": {
+                semesterTitle: "Học kỳ 1 / Năm học 2025 - 2026",
+                semesterName: "Học kỳ 1 năm học 2025-2026",
+                paidAmount: "26 400 000",
+                paidDate: "25/11/2025",
+                paidNote: "THU HOC PHI HK1 25 26",
+                courses: [
+                    { code: "1020503.2510.22.16", name: "An toàn Thông tin mạng", tc: 2, price: 1600000, check: "" },
+                    { code: "1023603.2510.22.16", name: "Chuyên đề công nghệ", tc: 2, price: 1600000, check: "" },
+                    { code: "1023140.2510.22.16", name: "Học máy và ứng dụng", tc: 2, price: 1600000, check: "" },
+                    { code: "1020413.2510.22.16", name: "Kiểm thử phần mềm", tc: 2, price: 1600000, check: "" },
+                    { code: "1023920.2510.22.16B", name: "PBL 6: Dự án chuyên ngành 1", tc: 3, price: 2400000, check: "" },
+                    { code: "1023910.2510.22.16", name: "Quản trị mạng", tc: 3, price: 2400000, check: "" },
+                    { code: "1023930.2510.22.16A", name: "TH Quản trị mạng (1TC)", tc: 0, price: 0, check: "" },
+                    { code: "1022603.2510.22.16", name: "Thực tập Tốt nghiệp (CNTT)", tc: 2, price: 1600000, check: "" },
+                    { code: "5070070.2510.23.16", name: "Tiếng Nhật 5 (CNTT)", tc: 1, price: 800000, check: "" },
+                    { code: "5070090.2510.22.16", name: "Tiếng Nhật 7 (CNTT)", tc: 1, price: 800000, check: "" },
+                    { code: "1021450.2510.22.16", name: "Lập trình thiết bị di động", tc: 3, price: 2400000, check: "" },
+                    { code: "1021560.2510.22.16", name: "Hệ quản trị CSDL nâng cao", tc: 3, price: 2400000, check: "" },
+                    { code: "1021780.2510.22.16", name: "Điện toán đám mây", tc: 3, price: 2400000, check: "" },
+                    { code: "1021890.2510.22.16", name: "Phân tích thiết kế hệ thống", tc: 3, price: 2400000, check: "" },
+                    { code: "1021990.2510.22.16", name: "Kỹ năng mềm", tc: 3, price: 2400000, check: "" }
+                ]
+            },
+            "HK2_2025_2026": {
+                semesterTitle: "Học kỳ 2 / Năm học 2025 - 2026",
+                semesterName: "Học kỳ 2 năm học 2025-2026",
+                paidAmount: "11 700 000",
+                paidDate: "",
+                paidNote: "",
+                // Tổng cộng: 27 TC + 4 TC (Chuyên đề TN) + 3 TC (Quản trị dự án) = 34 TC
+                courses: [
+                    { code: "1023950.2520.22.16", name: "Trí tuệ nhân tạo nâng cao", tc: 3, price: 2400000, check: "" },
+                    { code: "1023960.2520.22.16", name: "Khoa học dữ liệu nâng cao", tc: 3, price: 2400000, check: "" },
+                    { code: "1020373.2520.22.16", name: "Xử lý ảnh", tc: 3, price: 2400000, check: "" },
+                    { code: "1023970.2520.22.16", name: "Toán học trong Khoa học máy tính", tc: 3, price: 2400000, check: "" },
+                    { code: "1023980.2520.22.16", name: "Xử lý ngôn ngữ tự nhiên", tc: 3, price: 2400000, check: "" },
+                    { code: "1023990.2520.22.16", name: "Lưu trữ và xử lý dữ liệu lớn", tc: 3, price: 2400000, check: "" },
+                    { code: "1024000.2520.22.16", name: "Mô hình hóa hình học", tc: 3, price: 2400000, check: "" },
+                    { code: "1024010.2520.22.16", name: "Khai phá dữ liệu Web", tc: 3, price: 2400000, check: "" },
+                    { code: "1024020.2520.22.16", name: "PBL 7: Dự án chuyên ngành 2", tc: 3, price: 2400000, check: "" },
+                    { code: "1028888.2520.22.16", name: "Chuyên đề tốt nghiệp", tc: 4, price: 3200000, check: "" },
+                    { code: "1024080.2520.22.16", name: "Quản trị dự án CNTT", tc: 3, price: 2400000, check: "" }
+                ]
+            }
+        };
+
+        function formatMoney(amount) {
+            if (amount === 0 || amount === "") return "";
+            return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+
+        function loadData() {
+            const selectBox = document.getElementById("semesterSelect");
+            const selectedKey = selectBox.value;
+            const data = tuitionData[selectedKey];
+            const tbody = document.getElementById("tuitionTableBody");
+            const needToPayBody = document.getElementById("needToPayBody");
+
+            // Update Panel Titles and Info
+            document.getElementById("lblSemesterTitle").innerText = data.semesterTitle;
+            document.getElementById("paidSemesterName").innerText = data.semesterName;
+            document.getElementById("paidAmount").innerText = formatMoney(data.paidAmount || 0);
+            document.getElementById("totalPaidAmount").innerText = formatMoney(data.paidAmount || 0);
+            document.getElementById("paidDate").innerText = data.paidDate;
+            document.getElementById("paidNote").innerText = data.paidNote;
+
+            // --- Render Course Table ---
+            tbody.innerHTML = "";
+            let totalTC = 0;
+            let totalPrice = 0;
+
+            data.courses.forEach((course, index) => {
+                totalTC += course.tc;
+                totalPrice += course.price;
+                const row = `
+                    <tr>
+                        <td class="col-stt">${index + 1}</td>
+                        <td>${course.code}</td>
+                        <td>${course.name}</td>
+                        <td class="text-center">${course.tc}</td>
+                        <td></td>
+                        <td class="col-money">${formatMoney(course.price)}</td>
+                        <td class="text-center">${course.check ? '<span class="check-mark">✓</span>' : ''}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+
+            // Total Row
+            const totalRow = `
+                <tr class="row-total">
+                    <td colspan="3" class="text-right">Tổng cộng:</td>
+                    <td class="text-center">${totalTC}</td>
+                    <td></td>
+                    <td class="col-money">${formatMoney(totalPrice)}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `;
+            tbody.innerHTML += totalRow;
+
+            // --- Render "Need to Pay" Section ---
+            needToPayBody.innerHTML = "";
+            const paidVal = parseInt(String(data.paidAmount).replace(/\s/g, '')) || 0;
+            const remaining = totalPrice - paidVal;
+            
+            if (remaining > 0) {
+                const needRow = `
+                    <tr>
+                         <td class="col-stt">1</td>
+                         <td>${data.semesterName}</td>
+                         <td class="text-center text-bold text-red">${formatMoney(remaining)}</td>
+                         <td></td>
+                    </tr>
+                `;
+                needToPayBody.innerHTML = needRow;
+            }
+        }
+
+        // Load data on start
+        window.onload = loadData;
+    </script>
+</body>
+</html>

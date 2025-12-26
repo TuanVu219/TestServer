@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống thông tin sinh viên</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            background-color: #fff;
+        }
+
+        /* HEADER */
+        .header {
+            padding: 10px 0;
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header img {
+            height: 80px; /* Chiều cao logo */
+            margin-right: 15px;
+        }
+
+        .header-text h1 {
+            color: #005aab;
+            font-size: 24px;
+            margin: 0;
+            font-weight: bold;
+            font-style: italic;
+            text-transform: uppercase;
+        }
+        
+        .header-text h2 {
+            color: #555;
+            font-size: 20px;
+            margin: 5px 0 0 0;
+            font-weight: bold;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: #4a85f7; /* Màu xanh dương nhạt giống ảnh */
+            background: linear-gradient(to bottom, #5c97ff, #3875ec);
+            border-bottom: 1px solid #285dc2;
+        }
+
+        .nav-container {
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .navbar a:hover {
+            background-color: #285dc2;
+        }
+
+        /* MAIN LOGIN AREA */
+        .main-content {
+            width: 1000px;
+            margin: 40px auto;
+            display: flex;
+            justify-content: center; /* Căn giữa nội dung */
+        }
+
+        .login-box {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-icon {
+            margin-right: 20px;
+        }
+        
+        .user-icon img {
+            height: 100px; /* Chỗ để ảnh icon người + chìa khóa */
+        }
+
+        .login-form table {
+            border-spacing: 5px;
+        }
+
+        .login-form label {
+            font-weight: normal;
+            color: #333;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #a0a0a0;
+            background-color: #eef3fb; /* Màu nền input hơi xanh */
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .btn-login {
+            background: linear-gradient(to bottom, #e0e0e0, #c0c0c0);
+            border: 1px solid #999;
+            padding: 5px 20px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+
+        .btn-login:hover {
+            background: #d0d0d0;
+        }
+
+        /* FOOTER INFO */
+        .footer-info {
+            background-color: #0052cc; /* Màu xanh đậm */
+            color: white;
+            padding: 20px 0;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .footer-container {
+            width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-col {
+            width: 24%;
+        }
+
+        .footer-col h3 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .footer-col a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* COPYRIGHT */
+        .copyright {
+            background-color: #003380;
+            color: #ccc;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://sv.dut.udn.vn/Styles/images/logo.png" alt="Logo"> 
+       
+    </div>
+
+    <div class="navbar">
+        <div class="nav-container">
+            <a href="#">Trang chủ</a>
+            <a href="#">Chương trình</a>
+            <a href="#">Kế hoạch</a>
+            <a href="#">Danh sách</a>
+            <a href="#">Phòng học & Hệ thống</a>
+            <a href="#">Liên kết</a>
+            <a href="#">Hỗ trợ</a>
+            <a href="#">Đăng nhập</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="login-box">
+            <div class="user-icon">
+                <img src="https://sv.dut.udn.vn/Styles/images/Login.gif" alt="User Icon">
+            </div>
+            <div class="login-form">
+                <form onsubmit="return handleLogin(event)">
+                    <table>
+                        <tr>
+                            <td><label>Tài khoản:</label></td>
+                            <td><input type="text" id="username" value=""></td>
+                        </tr>
+                        <tr>
+                            <td><label>Mật khẩu:</label></td>
+                            <td><input type="password" id="password"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center;">
+                                <button type="submit" class="btn-login">Đăng nhập</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-info">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>Phòng Tổ chức - Hành chính</h3>
+                ĐC: Phòng S01.04<br>
+                ĐT: 0236.3842308<br>
+                <a href="#">http://dut.udn.vn/Phong/TCHC</a>
+                <br><br>
+                <h3>Phòng Đào tạo</h3>
+                ĐC: Phòng S05.07, S05.10<br>
+                ĐT: 0236.3842145<br>
+                <a href="#">http://dut.udn.vn/Phong/DaoTao</a>
+            </div>
+            <div class="footer-col">
+                <h3>Phòng Khoa học Công nghệ & Hợp tác quốc tế</h3>
+                ĐC: Phòng S06.02<br>
+                ĐT: 0236.841292<br>
+                <a href="#">http://dut.udn.vn/Phong/KhoaHoc</a>
+                <br><br>
+                <h3>Phòng Khảo thí và Đảm bảo chất lượng giáo dục</h3>
+                ĐC: Phòng S05.03<br>
+                ĐT: 0236.3737931<br>
+                <a href="#">http://dut.udn.vn/Phong/QualityAssurance</a>
+            </div>
+            <div class="footer-col">
+                <h3>Phòng Công tác sinh viên</h3>
+                ĐC: Phòng S06.08<br>
+                ĐT: 0236.3738268<br>
+                <a href="#">http://dut.udn.vn/Phong/Sinhvien</a>
+                <br><br>
+                <h3>Phòng Kế hoạch - Tài chính</h3>
+                ĐC: Phòng S03.11<br>
+                ĐT: 0236.3841660<br>
+                <a href="#">http://dut.udn.vn/Phong/TaiChinh</a>
+            </div>
+            <div class="footer-col">
+                <h3>Phòng Cơ sở Vật chất</h3>
+                ĐC: Phòng S03.02, S03.05<br>
+                ĐT: 0236.3740719<br>
+                <a href="#">http://dut.udn.vn/Phong/VatChat</a>
+                <br><br>
+                <h3>Phòng Thanh tra - Pháp chế</h3>
+                ĐC: Phòng S04.05<br>
+                ĐT: 0236.3740718<br>
+                <a href="#">http://dut.udn.vn/Phong/Thanhtra</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="copyright">
+        © 2014 - Trường Đại học Bách Khoa - Đại học Đà Nẵng
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            // Ngăn form tải lại trang
+            event.preventDefault();
+
+            // Lấy giá trị từ ô input
+            var user = document.getElementById("username").value;
+            var pass = document.getElementById("password").value;
+
+            // Kiểm tra thông tin đăng nhập
+            // Yêu cầu: User = 102220304 và Pass = tuanvu219@@
+            if (user === "102220304" && pass === "tuanvu219@@") {
+                alert("Đăng nhập thành công! Đang chuyển hướng vào hệ thống...");
+                // Ở đây bạn có thể thêm code chuyển trang, ví dụ: 
+                window.location.href = "Canhan.html";
+            } else {
+                alert("Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại!");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Thông Tin Sinh Viên - Thông tin cá nhân</title>
+    <style>
+        /* --- RESET & BASIC STYLES --- */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #333;
+        }
+        * { box-sizing: border-box; }
+        
+        input, select {
+            padding: 3px 5px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+            width: 100%;
+            height: 26px;
+        }
+        
+        input[readonly] {
+            background-color: #f5f5f5;
+            color: #555;
+        }
+
+        /* --- LAYOUT UTILITIES --- */
+        .container { width: 100%; max-width: 1300px; padding: 0 10px; }
+        .row { display: flex; flex-wrap: wrap; margin-bottom: 5px; }
+        .col-left { width: 160px; padding-right: 15px; } /* Cột chứa ảnh */
+        .col-right { flex: 1; } /* Cột chứa form */
+        
+        .form-group { display: flex; align-items: center; margin-bottom: 5px; padding-right: 10px; }
+        .form-group label { width: 110px; text-align: right; margin-right: 10px; font-weight: normal; white-space: nowrap; }
+        .form-group .input-wrap { flex: 1; }
+        
+        /* Grid nhỏ trong form */
+        .w-33 { width: 33.33%; }
+        .w-50 { width: 50%; }
+        .w-100 { width: 100%; }
+
+        /* --- HEADER --- */
+        .header { display: flex; align-items: center; padding: 10px 0; }
+        .header img { height: 60px; margin-right: 15px; }
+        .header-title h1 { color: #2e6da4; font-size: 24px; margin: 0; font-weight: bold; text-transform: uppercase; }
+        .header-title h2 { color: #666; font-size: 18px; margin: 2px 0 0 0; font-weight: normal; }
+
+        /* --- NAVBAR & DROPDOWN --- */
+        .navbar { background-color: #4D90FE; color: white; margin-bottom: 10px; height: 40px; display: flex; align-items: center; }
+        .nav-list { list-style: none; padding: 0; margin: 0; display: flex; height: 100%; }
+        .nav-item { position: relative; height: 100%; display: flex; align-items: center; }
+        
+        .nav-link { 
+            padding: 0 15px; 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            display: flex; 
+            align-items: center; 
+            height: 100%; 
+            cursor: pointer;
+        }
+        .nav-item:hover { background-color: #3071a9; }
+        
+        /* Dropdown Content */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #4D90FE;
+            min-width: 250px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .dropdown-content a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #6fa8ff;
+            font-weight: normal;
+        }
+        
+        .dropdown-content a:hover { background-color: #3071a9; }
+        
+        /* Show dropdown on hover */
+        .nav-item:hover .dropdown-content { display: block; }
+
+        .user-info { margin-left: auto; padding-right: 15px; font-size: 13px; font-weight: bold; }
+        .user-info a { color: white; text-decoration: none; margin-left: 10px; }
+
+        /* --- MAIN CONTENT --- */
+        .page-title { 
+            color: #0066cc; 
+            font-size: 18px; 
+            margin: 10px 0; 
+            display: flex; 
+            align-items: center; 
+            font-weight: bold;
+        }
+        .icon-card {
+            display: inline-block; width: 24px; height: 24px; margin-right: 5px;
+            background: url('https://img.icons8.com/color/48/contact-card.png') no-repeat center/contain;
+        }
+
+        /* Tabs */
+        .tabs { display: flex; border-bottom: 1px solid #ccc; margin-bottom: 10px; }
+        .tab { 
+            padding: 8px 15px; 
+            cursor: pointer; 
+            border: 1px solid #ccc; 
+            border-bottom: none; 
+            margin-right: 2px; 
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .tab.active { 
+            background-color: #007bff; 
+            color: white; 
+            font-weight: bold; 
+            border-color: #007bff;
+        }
+
+        /* Panels */
+        .panel { border: 1px solid #ddd; margin-bottom: 20px; background: #fff; }
+        .panel-header { 
+            background-color: #e0e0e0; 
+            padding: 5px 10px; 
+            font-weight: bold; 
+            border-bottom: 1px solid #ccc; 
+            color: #333;
+        }
+        .panel-body { padding: 10px; }
+
+        /* Profile Image */
+        .profile-img { width: 100%; border: 1px solid #ccc; padding: 2px; }
+
+        /* Address Section Text */
+        .address-note {
+            color: blue; 
+            font-style: italic; 
+            font-size: 12px; 
+            margin: 5px 0 5px 120px;
+        }
+
+        /* Buttons */
+        .btn-save {
+            background-color: #4a8bf5;
+            color: white;
+            border: 1px solid #3071a9;
+            padding: 5px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        .btn-save:hover { background-color: #3071a9; }
+        
+        .section-header {
+            color: #000080;
+            font-weight: bold;
+            margin: 10px 0 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://sv.dut.udn.vn/Styles/images/logo.png" alt="Logo">
+           
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="container" style="display: flex; align-items: center; width: 100%;">
+            <ul class="nav-list">
+                <li class="nav-item dropdown">
+                    <a class="nav-link">Cá nhân ▼</a>
+                    <div class="dropdown-content">
+                        <a href="Canhan.html">Thông tin nhân thân</a>
+                        <a href="sinhvien.html">Học phí</a>
+                        <a href="#">Tự đánh giá rèn luyện</a>
+                        <a href="#">Kết quả phục vụ cộng đồng</a>
+                        <a href="#">Đồ án/ Luận văn tốt nghiệp</a>
+                        <a href="#">Kết quả học tập học kỳ hiện tại</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link">Lớp/ Đoàn/ Hội</a></li>
+                <li class="nav-item"><a class="nav-link">Đăng ký</a></li>
+                <li class="nav-item"><a class="nav-link">Đề nghị Trường</a></li>
+                <li class="nav-item"><a class="nav-link">Phản ánh</a></li>
+            </ul>
+            <div class="user-info">
+                Chào Đoàn Công Tuấn Vũ-22T_Nhat1 (102220304)
+                <a href="#">Thoát</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-title">
+            <span class="icon-card"></span> Thông tin sinh viên
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">Thông tin nhân thân & ngành học</div>
+            <div class="tab">Đổi mật khẩu</div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">Thông tin cá nhân:</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-left">
+                        <img src="	https://cb.dut.udn.vn/ImageSV/22/102220304.jpg" alt="Profile" class="profile-img">
+                    </div>
+
+                    <div class="col-right">
+                        <div class="row">
+                            <div class="w-33 form-group">
+                                <label>Họ tên:</label>
+                                <div class="input-wrap"><input type="text" value="ĐOÀN CÔNG TUẤN VŨ" readonly style="font-weight: bold; text-transform: uppercase;"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Ngày sinh:</label>
+                                <div class="input-wrap"><input type="text" value="21/09/2004"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Nơi sinh:</label>
+                                <div class="input-wrap">
+                                    <select><option>Đà Nẵng</option></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-33 form-group">
+                                <label>Giới tính:</label>
+                                <div class="input-wrap"><input type="text" value="Nam"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Dân tộc:</label>
+                                <div class="input-wrap"><select><option>Kinh</option></select></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Quốc tịch:</label>
+                                <div class="input-wrap"><select><option>Việt Nam</option></select></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-33 form-group">
+                                <label>Số CCCD:</label>
+                                <div class="input-wrap"><input type="text" value="048204001711"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Ngày cấp CCCD:</label>
+                                <div class="input-wrap"><input type="text" value="04/05/2021"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Nơi sinh cũ:</label>
+                                <div class="input-wrap"><select><option>Thành phố Đà Nẵng</option></select></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-33 form-group">
+                                <label>Tôn giáo:</label>
+                                <div class="input-wrap"><select><option>Không</option></select></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Tài khoản cá nhân:</label>
+                                <div class="input-wrap"><input type="text" value="56010002001861"></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Tại ngân hàng:</label>
+                                <div class="input-wrap"><input type="text" value="Ngân hàng BIDV-CN Hải Vân" readonly></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-33 form-group">
+                                <label>Mã thẻ BHYT:</label>
+                                <div class="input-wrap"><input type="text" value=""></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <label>Hiệu lực đến ngày:</label>
+                                <div class="input-wrap"><input type="text" value=""></div>
+                            </div>
+                            <div class="w-33 form-group">
+                                <div class="input-wrap" style="padding-left: 20px;">
+                                    <input type="checkbox" style="width: auto; height: auto;"> Diện được cấp thẻ miễn phí
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+
+                        <div class="row">
+                            <div class="w-50 form-group">
+                                <label>Ngành:</label>
+                                <div class="input-wrap"><input type="text" value="Công nghệ thông tin" readonly></div>
+                            </div>
+                            <div class="w-50 form-group">
+                                <label>Lớp:</label>
+                                <div class="input-wrap"><input type="text" value="22T_Nhat1" readonly></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-50 form-group">
+                                <label>Chương trình đào tạo:</label>
+                                <div class="input-wrap"><input type="text" value="Công nghệ Thông tin K2022 Nhật _ Kỹ sư" readonly></div>
+                            </div>
+                            <div class="w-50 form-group">
+                                <label>Chương trình 2:</label>
+                                <div class="input-wrap"><input type="text" readonly></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-50 form-group">
+                                <label>Tài khoản Office365:</label>
+                                <div class="input-wrap"><input type="text" value="102220304@sv1.dut.udn.vn" readonly></div>
+                            </div>
+                            <div class="w-50 form-group">
+                                <label>Email cá nhân:</label>
+                                <div class="input-wrap"><input type="text" value="supersaza219@gmail.com"></div>
+                            </div>
+                        </div>
+                        
+                         <div class="row">
+                            <div class="w-50 form-group">
+                                <label>Mật khẩu ban đầu:</label>
+                                <div class="input-wrap"><input type="text" value="Rug00947" readonly></div>
+                            </div>
+                            <div class="w-50 form-group">
+                                <label>Facebook:</label>
+                                <div class="input-wrap"><input type="text" value=""></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="w-50 form-group">
+                                <label>Điện thoại:</label>
+                                <div class="input-wrap"><input type="text" value="0357219502"></div>
+                            </div>
+                            <div class="w-50 form-group">
+                                <label>Điện thoại gia đình:</label>
+                                <div class="input-wrap"><input type="text" value="0374364170"></div>
+                            </div>
+                        </div>
+
+                        <div class="address-note">
+                            Địa chỉ cư trú: cần nhập thông tin cụ thể Số nhà, Đường (hoặc Xóm, Thôn), tên phải viết hoa ký tự đầu. KHÔNG NHẬP PHƯỜNG, THÀNH PHỐ
+                        </div>
+                        
+                        <div class="row">
+                            <div class="w-100 form-group">
+                                <label><b>Địa chỉ cư trú hiện nay:</b></label>
+                                <div class="input-wrap" style="flex: 2;">
+                                    <input type="text" value="K267,H23/14, Ngô Quyền">
+                                </div>
+                                <label style="width: 80px;">Là địa chỉ của:</label>
+                                <div class="input-wrap" style="flex: 1;">
+                                    <select><option>Gia đình</option></select>
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="row">
+                             <div class="w-50 form-group">
+                                <label>Tỉnh/ Thành phố:</label>
+                                <div class="input-wrap">
+                                    <select><option>Tp Đà Nẵng</option></select>
+                                </div>
+                            </div>
+                             <div class="w-50 form-group">
+                                <label>Xã/ Phường:</label>
+                                <div class="input-wrap">
+                                    <select><option>Phường Sơn Trà</option></select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 10px 0 0 120px;">
+                            <button class="btn-save">Lưu thông tin cá nhân</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">Thông tin nhân thân:</div>
+            <div class="panel-body">
+                <div class="section-header">Gia đình:</div>
+                
+                <div class="row">
+                     <div class="w-33 form-group">
+                        <label><b>Mẹ:</b> Họ và tên mẹ:</label>
+                        <div class="input-wrap"><input type="text" value="Đinh Thị Thái"></div>
+                    </div>
+                     <div class="w-33 form-group">
+                        <label>Ngày sinh mẹ:</label>
+                        <div class="input-wrap" style="display: flex; gap: 2px;">
+                            <select style="width: 40px"><option>1</option></select>
+                            <select style="width: 40px"><option>12</option></select>
+                            <select style="width: 60px"><option>1971</option></select>
+                        </div>
+                    </div>
+                     <div class="w-33 form-group" style="font-size: 12px;">
+                        <input type="checkbox" style="width: auto; margin-right: 5px;"> Có bằng Đại học/Cao đẳng
+                        <input type="checkbox" style="width: auto; margin-left: 10px; margin-right: 5px;"> Không có mẹ
+                    </div>
+                </div>
+
+                <div class="row">
+                     <div class="w-33 form-group">
+                        <label><b>Cha:</b> Họ và tên cha:</label>
+                        <div class="input-wrap"><input type="text" value="Đoàn Công Chính"></div>
+                    </div>
+                     <div class="w-33 form-group">
+                        <label>Ngày sinh cha:</label>
+                        <div class="input-wrap" style="display: flex; gap: 2px;">
+                            <select style="width: 40px"><option>6</option></select>
+                            <select style="width: 40px"><option>10</option></select>
+                            <select style="width: 60px"><option>1972</option></select>
+                        </div>
+                    </div>
+                     <div class="w-33 form-group" style="font-size: 12px;">
+                        <input type="checkbox" style="width: auto; margin-right: 5px;"> Có bằng Đại học/Cao đẳng
+                        <input type="checkbox" style="width: auto; margin-left: 10px; margin-right: 5px;"> Không có cha
+                    </div>
+                </div>
+
+                <div class="section-header" style="border: none; color: blue; font-size: 13px;">Thường trú gia đình:</div>
+                <div class="row">
+                    <div class="w-33 form-group">
+                        <label>Số nhà, đường:</label>
+                        <div class="input-wrap"><input type="text" value="K267,H23/14, Ngô Quyền"></div>
+                    </div>
+                    <div class="w-33 form-group">
+                        <label>Tỉnh/ Thành phố:</label>
+                        <div class="input-wrap"><select><option>Tp Đà Nẵng</option></select></div>
+                    </div>
+                    <div class="w-33 form-group">
+                        <label>Xã/ Phường:</label>
+                        <div class="input-wrap"><select><option>Phường Sơn Trà</option></select></div>
+                    </div>
+                </div>
+
+                <div class="section-header" style="border: none; color: blue; font-size: 13px;">Khi khẩn cấp, Trường báo tin cho người thân theo thông tin liên hệ sau đây:</div>
+                <div class="row">
+                    <div class="w-33 form-group">
+                        <label>Họ tên/ Quan hệ:</label>
+                        <div class="input-wrap"><input type="text" value="Đinh Thị Thái"></div>
+                    </div>
+                    <div class="w-33 form-group">
+                        <label>Số điện thoại:</label>
+                        <div class="input-wrap"><input type="text" value="0374364170" style="background-color: #f9f9f9;"></div>
+                    </div>
+                    <div class="w-33 form-group">
+                        <label>Địa chỉ:</label>
+                        <div class="input-wrap"><input type="text" value="K267,H23/14 Ngô Quyền"></div>
+                    </div>
+                </div>
+
+                 <div class="section-header" style="border: none; color: blue; font-size: 13px;">Thông tin liên hệ sau khi tốt nghiệp:</div>
+                 <div class="row">
+                    <div class="w-100 form-group">
+                        <label>Họ tên/ Địa chỉ</label>
+                        <div class="input-wrap"><input type="text" value="Đoàn Công Tuấn Vũ / k267,H23/14, Ngô Quyền"></div>
+                    </div>
+                </div>
+
+                <div style="margin: 10px 0 0 120px;">
+                    <button class="btn-save">Lưu thông tin nhân thân</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
